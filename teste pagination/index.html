@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Paginação</title>
+    <style>
+        .pagination {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .pagination li {
+            margin: 0 5px;
+        }
+        .pagination a {
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #333;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="product-list"></div>
+    <ul id="pagination" class="pagination"></ul>
+
+    <script>
+
+        // Dados de exemplo
+        const products = [
+            "Produto 1", "Produto 2", "Produto 3", "Produto 4", "Produto 5",
+            "Produto 6", "Produto 7", "Produto 8", "Produto 9", "Produto 10",
+            "Produto 11", "Produto 12", "Produto 13", "Produto 14", "Produto 15",
+            "Produto 11", "Produto 12", "Produto 13", "Produto 14", "Produto 15",
+            "Produto 11", "Produto 12", "Produto 13", "Produto 14", "Produto 15",
+            "Produto 11", "Produto 12", "Produto 13", "Produto 14", "Produto 15",
+        ];
+
+        const itemsPerPage = 5; // Quantidade de itens por página
+        let currentPage = 1; // Página inicial
+
+        // Função para exibir produtos
+        function showProducts(page) {
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageProducts = products.slice(start, end);
+
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = pageProducts.map(product => `<p>${product}</p>`).join('');
+        }
+
+        // Função para criar a barra de paginação
+        function createPagination() {
+            const totalPages = Math.ceil(products.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = ''; // Limpa a paginação existente
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageItem = document.createElement('li');
+                const pageLink = document.createElement('a');
+                pageLink.href = '#';
+                pageLink.textContent = i;
+
+                // Adiciona evento de clique na página
+                pageLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    currentPage = i;
+                    showProducts(currentPage);
+                    createPagination();
+                });
+
+                if (i === currentPage) {
+                    pageLink.style.fontWeight = 'bold'; // Marca a página ativa
+                }
+
+                pageItem.appendChild(pageLink);
+                pagination.appendChild(pageItem);
+            }
+        }
+
+        // Inicialização
+        showProducts(currentPage);
+        createPagination();
+
+    </script>
+
+</body>
+</html>
